@@ -8,8 +8,8 @@ public class birbscript : MonoBehaviour
     public float flapStrenght;
     public logicScript logic;
     public bool birdIsAlive = true;
-    public float fallthreshold = -35;
-    public float maxheight = 42;
+    public float fallthreshold = -42;
+    public float maxheight = 45;
     audioManage audioManager;
     // Start is called before the first frame update
     void Start()

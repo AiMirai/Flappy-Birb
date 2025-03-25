@@ -7,7 +7,7 @@ using UnityEngine;
 public class pipeSpawner : MonoBehaviour
 {
     public GameObject Pipe;
-    public float initialSpawnRate = 8;
+    public float initialSpawnRate = 10;
     public float spawnRate;
     private float timer = 0;
     public float heightOffset = 10;
@@ -46,8 +46,13 @@ public class pipeSpawner : MonoBehaviour
         pipeMoveScript pipeMove = FindObjectOfType<pipeMoveScript>();
         if (pipeMove != null)
         {
-            float currentPipeSpeed = pipeMove.moveSpeed;
-            spawnRate = Mathf.Max(initialSpawnRate * 8f / currentPipeSpeed, minimumSpawnRate); // Assume base speed is 5
+           float currentPipeSpeed = pipeMove.moveSpeed;
+            // Adjust the spawn rate to increase more gradually with speed
+            spawnRate = Mathf.Max(initialSpawnRate / (1f + (currentPipeSpeed - 1f) * 0.4f), minimumSpawnRate);
+
+
+
+            // spawnRate = Mathf.Max(initialSpawnRate * 8f / currentPipeSpeed, minimumSpawnRate); // Assume base speed is 5
         }
 
     }

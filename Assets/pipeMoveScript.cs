@@ -31,7 +31,7 @@ public class pipeMoveScript : MonoBehaviour
             int playerScore = logic.getScore();
 
             // Adjust the move speed based on the player score (example: increase by speedIncrease for each point)
-            moveSpeed = Mathf.Lerp(9f, 20f, playerScore / 100f);
+            moveSpeed = Mathf.Lerp(10f, 35f, playerScore / 100f);
 
 
         }

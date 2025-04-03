@@ -19,7 +19,7 @@ public class ParallaxBackground : MonoBehaviour
         // Smooth transition fix: Reset position *slightly* earlier to prevent gaps
         if (transform.position.x <= -width + 0.1f)  // 0.1f ensures no delay
         {
-            transform.position += new Vector3(width * 2f, 0, 0);
+            transform.position += new Vector3(width * 1.95f, 0, 0);
         }
     }
 }

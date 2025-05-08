@@ -1,4 +1,5 @@
 
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class audioManage : MonoBehaviour
@@ -8,17 +9,33 @@ public class audioManage : MonoBehaviour
 
 
 
+
     public AudioClip background;
     public AudioClip death;
     public AudioClip point;
+   public AudioClip buttonClick;
 
     private void Start()
     {
         musicSource.clip = background;
         musicSource.Play();
     }
-    public void playSFX(AudioClip clip)
+    public void PlayButtonClick()
+   {
+        if (buttonClick != null)
+        {
+           sfxSource.PlayOneShot(buttonClick);
+        }
+    }
+
+public void playSFX(AudioClip clip)
     {
-        sfxSource.PlayOneShot(clip);
+        if (sfxSource.isPlaying)
+        {
+            sfxSource.Stop();  // Stop current SFX to avoid overlap
+        }
+
+        sfxSource.clip = clip;
+        sfxSource.Play();
     }
 }

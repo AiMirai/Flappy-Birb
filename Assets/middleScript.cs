@@ -24,10 +24,9 @@ public class middleScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        audioManager.playSFX(audioManager.point);
         if (collision.gameObject.layer == 3 && birbscript.birdIsAlive==true)
         {
-            
+            audioManager.playSFX(audioManager.point);
             logic.addScore();
         }
     }

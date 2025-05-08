@@ -4,14 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using TMPro;
 public class logicScript : MonoBehaviour
 {
     public int playerScore;
     public int highScore;
-    public Text highScoreText;
-    public Text scoreText;
+
+    public TextMeshProUGUI highScoreText;
+    public TextMeshProUGUI scoreText;
     public GameObject gameOverScreen;
+    public TextMeshProUGUI gameOverScoreText;      
+    public TextMeshProUGUI gameOverHighScoreText;
+    public GameObject pauseButton;
+
     [ContextMenu("Increase Score")]
+    
 
     void Start()
     {
@@ -37,7 +44,17 @@ public class logicScript : MonoBehaviour
     }
     public void gameOver()
     {
+        int storedHighScore = PlayerPrefs.GetInt("HighScore", 0);
+        gameOverScoreText.text = playerScore.ToString();
+        gameOverHighScoreText.text = storedHighScore.ToString();
+
         gameOverScreen.SetActive(true);
+        pauseButton.SetActive(false);
+
+    }
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Start Screen"); // Replace with your scene name
     }
     private void SaveHighScore()
     {

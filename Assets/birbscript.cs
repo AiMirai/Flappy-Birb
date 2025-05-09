@@ -12,25 +12,33 @@ public class birbscript : MonoBehaviour
     public float fallthreshold = -42;
     public float maxheight = 45;
     audioManage audioManager;
-    // Start is called before the first frame update
+
+    private bool gameStarted = false;
+
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<logicScript>();
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<audioManage>();
+        myRigidbody.simulated = false; // Disable gravity until game starts
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)) && birdIsAlive)
+        if (!gameStarted && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
         {
-            myRigidbody.velocity = Vector2.up * flapStrenght;
+            StartGame();
         }
-        if (transform.position.y < fallthreshold || transform.position.y > maxheight)
+        else if (gameStarted && birdIsAlive && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
+        {
+            myRigidbody.linearVelocity= Vector2.up * flapStrenght;
+        }
+
+        if (gameStarted && (transform.position.y < fallthreshold || transform.position.y > maxheight))
         {
             HandleDeath();
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (birdIsAlive)
@@ -38,6 +46,7 @@ public class birbscript : MonoBehaviour
             HandleDeath();
         }
     }
+
     private void HandleDeath()
     {
         if (deathHandled) return;
@@ -47,8 +56,17 @@ public class birbscript : MonoBehaviour
 
         audioManager.playSFX(audioManager.death);
         logic.gameOver();
+    }
 
+    private void StartGame()
+    {
+        logic.HideStartText();
+        gameStarted = true;
+        myRigidbody.simulated = true;
+        myRigidbody.linearVelocity = Vector2.up * flapStrenght;
 
-
+        GameObject.FindGameObjectWithTag("PipeSpawner")
+            .GetComponent<pipeSpawner>()
+            .StartSpawning(); // <-- Start spawning pipes now
     }
 }

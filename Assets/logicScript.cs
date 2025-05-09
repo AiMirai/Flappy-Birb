@@ -16,6 +16,7 @@ public class logicScript : MonoBehaviour
     public TextMeshProUGUI gameOverScoreText;      
     public TextMeshProUGUI gameOverHighScoreText;
     public GameObject pauseButton;
+    public GameObject startText;
 
     [ContextMenu("Increase Score")]
     
@@ -66,6 +67,11 @@ public class logicScript : MonoBehaviour
             PlayerPrefs.SetString("HighScoreDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             PlayerPrefs.Save(); // Save changes
         }
+    }
+    public void HideStartText()
+    {
+        if (startText != null)
+            startText.SetActive(false);
     }
 
 }

@@ -7,7 +7,7 @@ public class pipeMoveScript : MonoBehaviour
 {
     public float moveSpeed;
     float deadZone = -60;
-    float speedIncrease = 0.1f;
+    //float speedIncrease = 0.1f;
     public logicScript logic;
     // Start is called before the first frame update
     void Start()
@@ -31,7 +31,8 @@ public class pipeMoveScript : MonoBehaviour
             int playerScore = logic.getScore();
 
             // Adjust the move speed based on the player score (example: increase by speedIncrease for each point)
-            moveSpeed = 9f + (playerScore * speedIncrease);
+            moveSpeed = Mathf.Lerp(10f, 35f, playerScore / 100f);
+
 
         }
 

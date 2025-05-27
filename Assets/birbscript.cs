@@ -8,34 +8,65 @@ public class birbscript : MonoBehaviour
     public float flapStrenght;
     public logicScript logic;
     public bool birdIsAlive = true;
-    public float fallthreshold = -35;
-    public float maxheight = 42;
+    private bool deathHandled = false;
+    public float fallthreshold = -42;
+    public float maxheight = 45;
     audioManage audioManager;
-    // Start is called before the first frame update
+
+    private bool gameStarted = false;
+
     void Start()
     {
         logic = GameObject.FindGameObjectWithTag("Logic").GetComponent<logicScript>();
         audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<audioManage>();
+        myRigidbody.simulated = false; // Disable gravity until game starts
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && birdIsAlive)
+        if (!gameStarted && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
         {
-            myRigidbody.velocity = Vector2.up * flapStrenght;
+            StartGame();
         }
-        if (transform.position.y < fallthreshold || transform.position.y > maxheight)
+        else if (gameStarted && birdIsAlive && (Input.GetKeyDown(KeyCode.Space) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)))
         {
-            logic.gameOver();
-            birdIsAlive = false;
+            myRigidbody.linearVelocity= Vector2.up * flapStrenght;
+        }
+
+        if (gameStarted && (transform.position.y < fallthreshold || transform.position.y > maxheight))
+        {
+            HandleDeath();
         }
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (birdIsAlive)
+        {
+            HandleDeath();
+        }
+    }
+
+    private void HandleDeath()
+    {
+        if (deathHandled) return;
+
+        deathHandled = true;
+        birdIsAlive = false;
+
         audioManager.playSFX(audioManager.death);
         logic.gameOver();
-        birdIsAlive = false;
     }
- 
+
+    private void StartGame()
+    {
+        logic.HideStartText();
+        gameStarted = true;
+        myRigidbody.simulated = true;
+        myRigidbody.linearVelocity = Vector2.up * flapStrenght;
+
+        GameObject.FindGameObjectWithTag("PipeSpawner")
+            .GetComponent<pipeSpawner>()
+            .StartSpawning(); // <-- Start spawning pipes now
+    }
 }
